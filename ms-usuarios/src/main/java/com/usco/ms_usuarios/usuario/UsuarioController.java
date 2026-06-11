@@ -1,4 +1,4 @@
-package com.usco.ms_usuarios;
+package com.usco.ms_usuarios.usuario;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

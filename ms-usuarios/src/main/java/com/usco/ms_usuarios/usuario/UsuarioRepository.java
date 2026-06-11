@@ -1,4 +1,4 @@
-package com.usco.ms_usuarios;
+package com.usco.ms_usuarios.usuario;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
