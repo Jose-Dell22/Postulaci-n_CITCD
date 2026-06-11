@@ -30,10 +30,10 @@ export class RegisterComponent {
   isSubmitting = false;
 
   readonly form = this.fb.nonNullable.group({
-    identificacion: ['', [Validators.required, Validators.pattern(/^[^\d]+$/)]],
+    identificacion: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
     nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
     correo: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(4)]],
     codigoDocente: ['']
   });
 

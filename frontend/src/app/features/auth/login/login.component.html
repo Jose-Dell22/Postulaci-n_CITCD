@@ -25,6 +25,12 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Contraseña</mat-label>
           <input matInput type="password" formControlName="password" />
+          @if (form.controls.password.errors?.['required'] && form.controls.password.touched) {
+            <mat-error>La contraseña es obligatoria</mat-error>
+          }
+          @if (form.controls.password.errors?.['minlength'] && form.controls.password.touched) {
+            <mat-error>La contraseña debe tener al menos 4 caracteres</mat-error>
+          }
         </mat-form-field>
 
         @if (errorMessage) {

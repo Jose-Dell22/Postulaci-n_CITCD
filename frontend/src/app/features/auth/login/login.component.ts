@@ -30,7 +30,7 @@ export class LoginComponent {
 
   readonly form = this.fb.nonNullable.group({
     correo: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    password: ['', [Validators.required, Validators.minLength(4)]]
   });
 
   constructor() {

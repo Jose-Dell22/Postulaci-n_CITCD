@@ -24,7 +24,7 @@
             <mat-error>La identificación es obligatoria</mat-error>
           }
           @if (form.controls.identificacion.errors?.['pattern'] && form.controls.identificacion.touched) {
-            <mat-error>La identificación no puede contener números</mat-error>
+            <mat-error>La identificación debe contener solo números</mat-error>
           }
         </mat-form-field>
 
@@ -57,7 +57,7 @@
             <mat-error>La contraseña es obligatoria</mat-error>
           }
           @if (form.controls.password.errors?.['minlength'] && form.controls.password.touched) {
-            <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+            <mat-error>La contraseña debe tener al menos 4 caracteres</mat-error>
           }
         </mat-form-field>
 
