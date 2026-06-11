@@ -1,0 +1,16 @@
+<mat-toolbar color="primary">
+  <span>Gestión de Convocatorias</span>
+  <span class="spacer"></span>
+  <span class="user">{{ userEmail }}</span>
+  <button mat-button (click)="logout()">Cerrar sesión</button>
+</mat-toolbar>
+
+<main class="content">
+  <mat-card>
+    <mat-card-title>Dashboard</mat-card-title>
+    <mat-card-content>
+      <p>Bienvenido al sistema de gestión de convocatorias institucionales.</p>
+      <p>Desde aquí podrá administrar usuarios, convocatorias, categorías, postulaciones y reportes según su rol.</p>
+    </mat-card-content>
+  </mat-card>
+</main>

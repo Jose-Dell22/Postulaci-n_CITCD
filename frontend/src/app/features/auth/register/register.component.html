@@ -1,0 +1,61 @@
+<div class="auth-page">
+  <a routerLink="/" class="back-link">
+    <span class="material-icons" aria-hidden="true">arrow_back</span>
+    Volver al inicio
+  </a>
+
+  <mat-card>
+    <mat-card-header>
+      <div class="card-brand">
+        <span class="card-brand__shield" aria-hidden="true">U</span>
+        <div>
+          <mat-card-title>Universidad Surcolombiana</mat-card-title>
+          <mat-card-subtitle>Crear cuenta</mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Identificación</mat-label>
+          <input matInput formControlName="identificacion" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput formControlName="nombre" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput type="email" formControlName="correo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+
+        @if (errorMessage) {
+          <p class="error">{{ errorMessage }}</p>
+        }
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="full-width"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? 'Registrando...' : 'Registrarse' }}
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        ¿Ya tiene cuenta?
+        <a routerLink="/login">Iniciar sesión</a>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

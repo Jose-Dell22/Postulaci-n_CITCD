@@ -1,0 +1,77 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    linear-gradient(180deg, var(--usco-white) 0%, var(--usco-gray-light) 100%);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  color: var(--usco-red);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--usco-red-dark);
+  }
+}
+
+mat-card {
+  width: 100%;
+  max-width: 420px;
+  border-top: 4px solid var(--usco-red);
+}
+
+.card-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-brand__shield {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.45rem;
+  background: var(--usco-red);
+  color: var(--usco-white);
+  font-weight: 700;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.error {
+  color: var(--usco-red-dark);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.auth-switch {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--usco-text-muted);
+
+  a {
+    color: var(--usco-red);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

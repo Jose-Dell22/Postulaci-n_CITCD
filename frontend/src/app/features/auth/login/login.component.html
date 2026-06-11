@@ -1,0 +1,45 @@
+<div class="auth-page">
+  <a routerLink="/" class="back-link">
+    <span class="material-icons" aria-hidden="true">arrow_back</span>
+    Volver al inicio
+  </a>
+
+  <mat-card>
+    <mat-card-header>
+      <div class="card-brand">
+        <span class="card-brand__shield" aria-hidden="true">U</span>
+        <div>
+          <mat-card-title>Universidad Surcolombiana</mat-card-title>
+          <mat-card-subtitle>Iniciar sesión</mat-card-subtitle>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo</mat-label>
+          <input matInput type="email" formControlName="correo" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+
+        @if (errorMessage) {
+          <p class="error">{{ errorMessage }}</p>
+        }
+
+        <button mat-flat-button color="primary" type="submit" class="full-width">
+          Ingresar
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        ¿No tiene cuenta?
+        <a routerLink="/registro">Registrarse</a>
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

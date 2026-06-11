@@ -1,0 +1,89 @@
+<div class="inicio">
+  <header class="header">
+    <div class="header__inner">
+      <a routerLink="/" class="brand" aria-label="Inicio">
+        <span class="brand__shield" aria-hidden="true">U</span>
+        <span class="brand__text">
+          <span class="brand__name">Universidad Surcolombiana</span>
+          <span class="brand__tagline">Gestión de Convocatorias</span>
+        </span>
+      </a>
+
+      <nav class="header__nav">
+        <a routerLink="/login" class="btn btn--outline">Iniciar sesión</a>
+        <a routerLink="/registro" class="btn btn--primary">Registrarse</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__badge">Plataforma institucional USCO</p>
+      <h1 class="hero__title">
+        Gestione convocatorias y postulaciones en un solo lugar
+      </h1>
+      <p class="hero__subtitle">
+        Sistema integral para estudiantes, docentes y personal administrativo de la
+        Universidad Surcolombiana. Publique convocatorias, postúlese y consulte
+        resultados de forma centralizada.
+      </p>
+      <div class="hero__actions">
+        <a routerLink="/registro" class="btn btn--primary btn--lg">Crear cuenta</a>
+        <a routerLink="/login" class="btn btn--outline btn--lg">Ya tengo cuenta</a>
+      </div>
+    </div>
+
+    <div class="hero__visual" aria-hidden="true">
+      <div class="hero__card hero__card--primary">
+        <span class="hero__card-icon">campaign</span>
+        <strong>Convocatorias activas</strong>
+        <p>Eventos, becas y proyectos</p>
+      </div>
+      <div class="hero__card hero__card--secondary">
+        <span class="hero__card-icon">how_to_reg</span>
+        <strong>Postulaciones</strong>
+        <p>Seguimiento en tiempo real</p>
+      </div>
+      <div class="hero__card hero__card--accent">
+        <span class="hero__card-icon">bar_chart</span>
+        <strong>Reportes</strong>
+        <p>Estadísticas por categoría</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2 class="features__title">¿Qué puede hacer con el sistema?</h2>
+    <div class="features__grid">
+      @for (feature of features; track feature.title) {
+        <article class="feature-card">
+          <span class="feature-card__icon material-icons" aria-hidden="true">
+            {{ feature.icon }}
+          </span>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta__inner">
+      <h2>¿Listo para comenzar?</h2>
+      <p>
+        Regístrese con su correo institucional o personal y acceda al panel de gestión
+        según su rol asignado.
+      </p>
+      <div class="cta__actions">
+        <a routerLink="/registro" class="btn btn--light btn--lg">Registrarse gratis</a>
+        <a routerLink="/login" class="btn btn--ghost btn--lg">Iniciar sesión</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>
+      © {{ currentYear }} Universidad Surcolombiana — Sistema de Gestión de Convocatorias
+    </p>
+  </footer>
+</div>
