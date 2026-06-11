@@ -1,4 +1,4 @@
-package com.usco.ms_usuarios.security;
+package com.usco.ms_usuarios.service;
 
 import com.usco.ms_usuarios.usuario.UsuarioRepository;
 
