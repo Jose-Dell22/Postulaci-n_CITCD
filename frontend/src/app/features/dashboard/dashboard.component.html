@@ -23,7 +23,7 @@
 
     <section class="options-grid">
       @for (opt of currentRoleInfo.options; track opt.title) {
-        <mat-card class="option-card" [style.--card-accent]="currentRoleInfo.color">
+        <mat-card class="option-card" [style.--card-accent]="currentRoleInfo.color" (click)="navigate(opt.route)">
           <mat-card-content>
             <span class="option-icon" [style.color]="currentRoleInfo.color">
               {{ opt.icon === 'people' ? '\uD83D\uDC65' :

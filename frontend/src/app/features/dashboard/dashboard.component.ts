@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -22,6 +23,7 @@ export interface RoleOption {
 })
 export class DashboardComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   readonly userEmail = this.authService.getUserEmail();
   readonly userRole = this.authService.getUserRole() as UserRole | null;
@@ -32,10 +34,10 @@ export class DashboardComponent {
       icon: 'shield',
       color: '#b5121b',
       options: [
-        { title: 'Usuarios', description: 'Gestionar usuarios del sistema', icon: 'people' },
-        { title: 'Convocatorias', description: 'Crear y gestionar convocatorias', icon: 'campaign' },
-        { title: 'Categorías', description: 'Administrar categorías', icon: 'category' },
-        { title: 'Reportes', description: 'Ver reportes del sistema', icon: 'bar_chart' }
+        { title: 'Usuarios', description: 'Gestionar usuarios del sistema', icon: 'people', route: '/usuarios' },
+        { title: 'Convocatorias', description: 'Crear y gestionar convocatorias', icon: 'campaign', route: '/convocatorias' },
+        { title: 'Categorías', description: 'Administrar categorías', icon: 'category', route: '/categorias' },
+        { title: 'Reportes', description: 'Ver reportes del sistema', icon: 'bar_chart', route: '/reportes' }
       ]
     },
     DOCENTE: {
@@ -43,9 +45,9 @@ export class DashboardComponent {
       icon: 'school',
       color: '#1565c0',
       options: [
-        { title: 'Convocatorias', description: 'Ver convocatorias disponibles', icon: 'campaign' },
-        { title: 'Postulaciones', description: 'Revisar postulaciones recibidas', icon: 'assignment' },
-        { title: 'Reportes', description: 'Ver reportes de postulaciones', icon: 'bar_chart' }
+        { title: 'Convocatorias', description: 'Ver convocatorias disponibles', icon: 'campaign', route: '/convocatorias' },
+        { title: 'Postulaciones', description: 'Revisar postulaciones recibidas', icon: 'assignment', route: '/postulaciones' },
+        { title: 'Reportes', description: 'Ver reportes de postulaciones', icon: 'bar_chart', route: '/reportes' }
       ]
     },
     ESTUDIANTE: {
@@ -53,15 +55,21 @@ export class DashboardComponent {
       icon: 'person',
       color: '#2e7d32',
       options: [
-        { title: 'Convocatorias', description: 'Explorar convocatorias activas', icon: 'campaign' },
-        { title: 'Mis Postulaciones', description: 'Ver mis postulaciones', icon: 'assignment' },
-        { title: 'Postularme', description: 'Postularme a una convocatoria', icon: 'how_to_reg' }
+        { title: 'Convocatorias', description: 'Explorar convocatorias activas', icon: 'campaign', route: '/convocatorias' },
+        { title: 'Mis Postulaciones', description: 'Ver mis postulaciones', icon: 'assignment', route: '/postulaciones' },
+        { title: 'Postularme', description: 'Postularme a una convocatoria', icon: 'how_to_reg', route: '/postulaciones' }
       ]
     }
   };
 
   get currentRoleInfo() {
     return this.userRole ? this.roleInfo[this.userRole] : null;
+  }
+
+  navigate(route?: string): void {
+    if (route) {
+      this.router.navigate([route]);
+    }
   }
 
   logout(): void {
