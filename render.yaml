@@ -1,0 +1,91 @@
+services:
+  - type: web
+    name: gc-api-gateway
+    runtime: docker
+    dockerfilePath: ./api-gateway/Dockerfile
+    envVars:
+      - key: SERVER_PORT
+        value: 8083
+      - key: MS_USUARIOS_URL
+        fromService:
+          name: gc-ms-usuarios
+          type: web
+          property: hostport
+      - key: MS_CONVOCATORIAS_URL
+        fromService:
+          name: gc-ms-convocatorias
+          type: web
+          property: hostport
+      - key: MS_POSTULACIONES_URL
+        fromService:
+          name: gc-ms-postulaciones
+          type: web
+          property: hostport
+      - key: CORS_ORIGINS
+        fromService:
+          name: gc-frontend
+          type: web
+          property: host
+
+  - type: web
+    name: gc-ms-usuarios
+    runtime: docker
+    dockerfilePath: ./ms-usuarios/Dockerfile
+    envVars:
+      - fromGroup: gc-database
+      - key: SERVER_PORT
+        value: 8080
+      - key: JWT_SECRET
+        generateValue: true
+
+  - type: web
+    name: gc-ms-convocatorias
+    runtime: docker
+    dockerfilePath: ./ms-convocatorias/Dockerfile
+    envVars:
+      - fromGroup: gc-database
+      - key: SERVER_PORT
+        value: 8081
+      - key: JWT_SECRET
+        fromService:
+          name: gc-ms-usuarios
+          type: web
+          envVarKey: JWT_SECRET
+
+  - type: web
+    name: gc-ms-postulaciones
+    runtime: docker
+    dockerfilePath: ./ms-postulaciones/Dockerfile
+    envVars:
+      - fromGroup: gc-database
+      - key: SERVER_PORT
+        value: 8082
+      - key: JWT_SECRET
+        fromService:
+          name: gc-ms-usuarios
+          type: web
+          envVarKey: JWT_SECRET
+      - key: MS_CONVOCATORIAS_URL
+        fromService:
+          name: gc-ms-convocatorias
+          type: web
+          property: hostport
+
+  - type: web
+    name: gc-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist/frontend/browser
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+
+envVarGroups:
+  - name: gc-database
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false

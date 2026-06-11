@@ -1,7 +1,5 @@
--- Sistema de Gestión de Convocatorias
+-- Sistema de Gestión de Convocatorias - Script completo v1
 
--- usuarios
--- categorias
--- convocatorias
--- convocatoria_categoria
--- postulaciones
+\i entidad_usuarios.sql
+\i entidad_convocatorias.sql
+\i entidad_postulaciones.sql
