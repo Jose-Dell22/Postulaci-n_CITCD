@@ -1,0 +1,83 @@
+@startuml DER_Gestion_Convocatorias
+
+hide circle
+skinparam linetype ortho
+
+entity "USUARIO" as usuario {
+    * id : BIGSERIAL <<PK>>
+    --
+    identificacion : VARCHAR(20)
+    nombre : VARCHAR(150)
+    correo : VARCHAR(150) <<UNIQUE>>
+    password : VARCHAR(255)
+    rol : VARCHAR(30)
+    estado : BOOLEAN
+    fecha_creacion : TIMESTAMP
+}
+
+entity "CONVOCATORIA" as convocatoria {
+    * id : BIGSERIAL <<PK>>
+    --
+    nombre : VARCHAR(200)
+    descripcion : TEXT
+    fecha_inicio : DATE
+    fecha_fin : DATE
+    cupos_disponibles : INTEGER
+    estado : VARCHAR(30)
+    fecha_creacion : TIMESTAMP
+}
+
+entity "CATEGORIA" as categoria {
+    * id : BIGSERIAL <<PK>>
+    --
+    nombre : VARCHAR(100) <<UNIQUE>>
+    descripcion : VARCHAR(255)
+}
+
+entity "POSTULACION" as postulacion {
+    * id : BIGSERIAL <<PK>>
+    --
+    usuario_id : BIGINT <<FK>>
+    convocatoria_id : BIGINT <<FK>>
+    estado : VARCHAR(30)
+    fecha_postulacion : TIMESTAMP
+}
+
+entity "CONVOCATORIA_CATEGORIA" as convocatoria_categoria {
+    * convocatoria_id : BIGINT <<FK>>
+    * categoria_id : BIGINT <<FK>>
+}
+
+usuario ||--o{ postulacion
+
+convocatoria ||--o{ postulacion
+
+convocatoria ||--o{ convocatoria_categoria
+
+categoria ||--o{ convocatoria_categoria
+
+note right of usuario
+ROLES
+
+ADMINISTRADOR
+DOCENTE
+ESTUDIANTE
+end note
+
+note right of convocatoria
+ESTADOS
+
+BORRADOR
+PUBLICADA
+CERRADA
+end note
+
+note right of postulacion
+ESTADOS
+
+PENDIENTE
+APROBADA
+RECHAZADA
+end note
+
+@enduml
