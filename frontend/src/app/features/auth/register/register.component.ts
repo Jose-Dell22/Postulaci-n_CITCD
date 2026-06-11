@@ -30,10 +30,11 @@ export class RegisterComponent {
   isSubmitting = false;
 
   readonly form = this.fb.nonNullable.group({
-    identificacion: ['', Validators.required],
-    nombre: ['', Validators.required],
+    identificacion: ['', [Validators.required, Validators.pattern(/^[^\d]+$/)]],
+    nombre: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
     correo: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    codigoDocente: ['']
   });
 
   constructor() {
@@ -51,7 +52,18 @@ export class RegisterComponent {
     this.errorMessage = '';
     this.isSubmitting = true;
 
-    this.authService.register(this.form.getRawValue()).subscribe({
+    const raw = this.form.getRawValue();
+    const request: any = {
+      identificacion: raw.identificacion,
+      nombre: raw.nombre,
+      correo: raw.correo,
+      password: raw.password
+    };
+    if (raw.codigoDocente.trim()) {
+      request.codigoDocente = raw.codigoDocente.trim();
+    }
+
+    this.authService.register(request).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: () => {
         this.isSubmitting = false;

@@ -23,9 +23,14 @@ public class JwtService {
     private Long expiration;
 
     public String generateToken(UserDetails user) {
+        String role = user.getAuthorities().stream()
+                .findFirst()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .orElse("ESTUDIANTE");
 
         return Jwts.builder()
                 .subject(user.getUsername())
+                .claim("rol", role)
                 .issuedAt(new Date())
                 .expiration(
                         new Date(

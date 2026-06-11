@@ -1,16 +1,45 @@
 <mat-toolbar color="primary">
   <span>Gestión de Convocatorias</span>
   <span class="spacer"></span>
+  @if (currentRoleInfo) {
+    <span class="role-badge" [style.background]="currentRoleInfo.color">
+      {{ currentRoleInfo.label }}
+    </span>
+  }
   <span class="user">{{ userEmail }}</span>
   <button mat-button (click)="logout()">Cerrar sesión</button>
 </mat-toolbar>
 
 <main class="content">
-  <mat-card>
-    <mat-card-title>Dashboard</mat-card-title>
-    <mat-card-content>
-      <p>Bienvenido al sistema de gestión de convocatorias institucionales.</p>
-      <p>Desde aquí podrá administrar usuarios, convocatorias, categorías, postulaciones y reportes según su rol.</p>
-    </mat-card-content>
-  </mat-card>
+  @if (currentRoleInfo) {
+    <section class="welcome">
+      <mat-card class="welcome-card">
+        <mat-card-content>
+          <p>Bienvenido al sistema de gestión de convocatorias institucionales.</p>
+          <p>Seleccione una opción para comenzar:</p>
+        </mat-card-content>
+      </mat-card>
+    </section>
+
+    <section class="options-grid">
+      @for (opt of currentRoleInfo.options; track opt.title) {
+        <mat-card class="option-card" [style.--card-accent]="currentRoleInfo.color">
+          <mat-card-content>
+            <span class="option-icon" [style.color]="currentRoleInfo.color">
+              {{ opt.icon === 'people' ? '\uD83D\uDC65' :
+                 opt.icon === 'campaign' ? '\uD83D\uDCE2' :
+                 opt.icon === 'category' ? '\uD83D\uDCC1' :
+                 opt.icon === 'bar_chart' ? '\uD83D\uDCCA' :
+                 opt.icon === 'school' ? '\uD83C\uDFEB' :
+                 opt.icon === 'assignment' ? '\uD83D\uDCCB' :
+                 opt.icon === 'how_to_reg' ? '\u270D\uFE0F' :
+                 opt.icon === 'shield' ? '\uD83D\uDEE1\uFE0F' : '\uD83D\uDCCB' }}
+            </span>
+            <h3>{{ opt.title }}</h3>
+            <p>{{ opt.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </section>
+  }
 </main>

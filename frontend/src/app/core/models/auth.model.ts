@@ -8,6 +8,7 @@ export interface RegisterRequest {
   nombre: string;
   correo: string;
   password: string;
+  codigoDocente?: string;
 }
 
 export interface AuthResponse {
@@ -17,4 +18,5 @@ export interface AuthResponse {
 export interface JwtPayload {
   sub: string;
   exp: number;
+  rol: string;
 }

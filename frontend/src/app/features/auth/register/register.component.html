@@ -19,22 +19,52 @@
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Identificación</mat-label>
-          <input matInput formControlName="identificacion" />
+          <input matInput formControlName="identificacion" placeholder="Ej: CC-12345" />
+          @if (form.controls.identificacion.errors?.['required'] && form.controls.identificacion.touched) {
+            <mat-error>La identificación es obligatoria</mat-error>
+          }
+          @if (form.controls.identificacion.errors?.['pattern'] && form.controls.identificacion.touched) {
+            <mat-error>La identificación no puede contener números</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nombre completo</mat-label>
-          <input matInput formControlName="nombre" />
+          <input matInput formControlName="nombre" placeholder="Ej: Juan Pérez" />
+          @if (form.controls.nombre.errors?.['required'] && form.controls.nombre.touched) {
+            <mat-error>El nombre es obligatorio</mat-error>
+          }
+          @if (form.controls.nombre.errors?.['pattern'] && form.controls.nombre.touched) {
+            <mat-error>El nombre solo puede contener letras</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Correo electrónico</mat-label>
-          <input matInput type="email" formControlName="correo" />
+          <input matInput type="email" formControlName="correo" placeholder="correo@usco.edu.co" />
+          @if (form.controls.correo.errors?.['required'] && form.controls.correo.touched) {
+            <mat-error>El correo es obligatorio</mat-error>
+          }
+          @if (form.controls.correo.errors?.['email'] && form.controls.correo.touched) {
+            <mat-error>Ingrese un correo válido</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Contraseña</mat-label>
-          <input matInput type="password" formControlName="password" />
+          <input matInput type="password" formControlName="password" placeholder="Mínimo 6 caracteres" />
+          @if (form.controls.password.errors?.['required'] && form.controls.password.touched) {
+            <mat-error>La contraseña es obligatoria</mat-error>
+          }
+          @if (form.controls.password.errors?.['minlength'] && form.controls.password.touched) {
+            <mat-error>La contraseña debe tener al menos 6 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Código de docente (opcional)</mat-label>
+          <input matInput formControlName="codigoDocente" placeholder="Si eres docente, ingresa tu código" />
+          <mat-hint>Déjelo vacío si es estudiante</mat-hint>
         </mat-form-field>
 
         @if (errorMessage) {

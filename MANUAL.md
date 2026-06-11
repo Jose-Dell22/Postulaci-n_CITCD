@@ -83,7 +83,7 @@ Abra **cinco terminales** y ejecute en cada una.
 ```powershell
 # Terminal 1
 cd ms-usuarios
-.\mvnw.cmd spring-boot:run
+.\mvnw.cmd mvn spring-boot:run
 
 # Terminal 2
 cd ms-convocatorias
@@ -95,7 +95,7 @@ cd ms-postulaciones
 
 # Terminal 4
 cd api-gateway
-.\mvnw.cmd spring-boot:run
+.\mvnw.cmd mvn spring-boot:run
 
 # Terminal 5
 cd frontend

@@ -27,6 +27,10 @@ public class AuthService {
     public AuthResponse register(
             RegisterRequest request) {
 
+        Rol rol = (request.getCodigoDocente() != null && !request.getCodigoDocente().isBlank())
+                ? Rol.DOCENTE
+                : Rol.ESTUDIANTE;
+
         Usuario usuario = Usuario.builder()
                 .identificacion(request.getIdentificacion())
                 .nombre(request.getNombre())
@@ -36,7 +40,7 @@ public class AuthService {
                                 request.getPassword()
                         )
                 )
-                .rol(Rol.ESTUDIANTE)
+                .rol(rol)
                 .estado(true)
                 .build();
 

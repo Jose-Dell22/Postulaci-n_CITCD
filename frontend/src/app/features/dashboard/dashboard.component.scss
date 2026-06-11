@@ -2,6 +2,17 @@
   flex: 1;
 }
 
+.role-badge {
+  margin-right: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .user {
   margin-right: 1rem;
   font-size: 0.9rem;
@@ -11,4 +22,42 @@
   padding: 1.5rem;
   max-width: 960px;
   margin: 0 auto;
+}
+
+.welcome-card {
+  margin-bottom: 1.5rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.option-card {
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border-top: 4px solid var(--card-accent, #b5121b);
+}
+
+.option-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.option-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.option-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+
+.option-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #666;
 }
