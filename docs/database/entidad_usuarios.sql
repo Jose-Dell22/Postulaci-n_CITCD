@@ -6,5 +6,6 @@ CREATE TABLE usuarios (
     password VARCHAR(255) NOT NULL,
     rol VARCHAR(30) NOT NULL,
     estado BOOLEAN DEFAULT TRUE,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    fecha_creacion TIMESTAMP NOT NULL DEFAULT NOW(),
+    codigo_docente VARCHAR(50)
 );

@@ -44,6 +44,9 @@ public class Usuario implements UserDetails {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @Column(name = "codigo_docente")
+    private String codigoDocente;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(

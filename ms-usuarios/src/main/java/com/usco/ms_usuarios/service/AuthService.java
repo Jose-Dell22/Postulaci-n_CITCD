@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -31,6 +33,10 @@ public class AuthService {
                 ? Rol.DOCENTE
                 : Rol.ESTUDIANTE;
 
+        String codigoDocenteValue = (request.getCodigoDocente() != null && !request.getCodigoDocente().isBlank())
+                ? request.getCodigoDocente()
+                : null;
+
         Usuario usuario = Usuario.builder()
                 .identificacion(request.getIdentificacion())
                 .nombre(request.getNombre())
@@ -42,6 +48,8 @@ public class AuthService {
                 )
                 .rol(rol)
                 .estado(true)
+                .fechaCreacion(LocalDateTime.now())
+                .codigoDocente(codigoDocenteValue)
                 .build();
 
         repository.save(usuario);
