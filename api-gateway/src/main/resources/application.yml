@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "${CORS_ORIGINS:http://localhost:4200}"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: ms-usuarios-auth
+          uri: ${MS_USUARIOS_URL:http://localhost:8080}
+          predicates:
+            - Path=/api/auth/**
+        - id: ms-usuarios
+          uri: ${MS_USUARIOS_URL:http://localhost:8080}
+          predicates:
+            - Path=/api/usuarios/**
+        - id: ms-convocatorias
+          uri: ${MS_CONVOCATORIAS_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/convocatorias/**,/api/categorias/**
+        - id: ms-convocatorias-reportes
+          uri: ${MS_CONVOCATORIAS_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/reportes/convocatorias-categoria
+        - id: ms-postulaciones
+          uri: ${MS_POSTULACIONES_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/postulaciones/**
+        - id: ms-postulaciones-reportes
+          uri: ${MS_POSTULACIONES_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/reportes/postulaciones-convocatoria,/api/reportes/resultado-postulaciones
+
+server:
+  port: ${SERVER_PORT:8083}
