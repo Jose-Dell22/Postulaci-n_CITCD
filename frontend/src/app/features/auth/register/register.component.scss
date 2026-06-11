@@ -37,15 +37,11 @@ mat-card {
   margin-bottom: 0.5rem;
 }
 
-.card-brand__shield {
-  display: grid;
-  place-items: center;
+.card-brand__logo {
   width: 2.5rem;
   height: 2.5rem;
+  object-fit: contain;
   border-radius: 0.45rem;
-  background: var(--usco-red);
-  color: var(--usco-white);
-  font-weight: 700;
 }
 
 .full-width {

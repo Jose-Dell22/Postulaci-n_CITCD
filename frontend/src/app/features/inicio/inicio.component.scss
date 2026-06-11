@@ -35,16 +35,11 @@
   color: inherit;
 }
 
-.brand__shield {
-  display: grid;
-  place-items: center;
+.brand__logo {
   width: 2.75rem;
   height: 2.75rem;
+  object-fit: contain;
   border-radius: 0.5rem;
-  background: var(--usco-red);
-  color: var(--usco-white);
-  font-weight: 700;
-  font-size: 1.25rem;
 }
 
 .brand__text {

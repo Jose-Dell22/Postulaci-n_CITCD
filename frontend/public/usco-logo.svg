@@ -1,0 +1,25 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="200" height="200" fill="#ffffff"/>
+  
+  <!-- Escudo externo -->
+  <path d="M 100 20 L 160 50 L 160 110 Q 100 150 100 150 Q 100 150 40 110 L 40 50 Z" fill="none" stroke="#C41E3A" stroke-width="3"/>
+  
+  <!-- Escudo interno rojo -->
+  <path d="M 100 30 L 155 57 L 155 105 Q 100 140 100 140 Q 100 140 45 105 L 45 57 Z" fill="#C41E3A" opacity="0.9"/>
+  
+  <!-- Franja azul horizontal -->
+  <rect x="45" y="85" width="110" height="20" fill="#003DA5"/>
+  
+  <!-- Círculo central blanco -->
+  <circle cx="100" cy="75" r="18" fill="#ffffff"/>
+  
+  <!-- Círculo interior azul -->
+  <circle cx="100" cy="75" r="14" fill="#003DA5"/>
+  
+  <!-- Línea decorativa superior -->
+  <line x1="70" y1="50" x2="130" y2="50" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+  
+  <!-- Texto USCO -->
+  <text x="100" y="155" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#C41E3A">USCO</text>
+</svg>
