@@ -2,9 +2,9 @@ package com.usco.ms_usuarios;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+
+@SpringBootApplication()
 public class MsUsuariosApplication {
 
     public static void main(String[] args) {
