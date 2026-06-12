@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../core/services/auth.service';
+import { ConvocatoriasService, ConvocatoriaEntity, ConvocatoriaCreateRequest } from '../../core/services/convocatorias.service';
+import { UsuariosService, UsuarioEntity } from '../../core/services/usuarios.service';
+import { PostulacionesService, PostulacionCreateRequest } from '../../core/services/postulaciones.service';
 
 interface Convocatoria {
   id: number;
@@ -51,7 +54,7 @@ interface Convocatoria {
               <input matInput formControlName="descripcion" />
             </mat-form-field>
             <button mat-flat-button color="primary" type="submit" [disabled]="createForm.invalid">
-              {{ isAdmin ? 'Crear convocatoria' : 'Crear convocatoria' }}
+              Crear convocatoria
             </button>
           </form>
         </mat-card>
@@ -104,11 +107,15 @@ interface Convocatoria {
     `
   ]
 })
-export class ConvocatoriasComponent {
+export class ConvocatoriasComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+  private readonly convocatoriasService = inject(ConvocatoriasService);
+  private readonly postulacionesService = inject(PostulacionesService);
+  private readonly usuariosService = inject(UsuariosService);
 
   readonly userRole = this.authService.getUserRole();
+  readonly userEmail = this.authService.getUserEmail();
 
   readonly createForm = this.fb.nonNullable.group({
     titulo: ['', [Validators.required]],
@@ -117,26 +124,37 @@ export class ConvocatoriasComponent {
     descripcion: ['', [Validators.required]]
   });
 
-  readonly convocatorias: Convocatoria[] = [
-    {
-      id: 1,
-      titulo: 'Beca de investigación 2026',
-      categoria: 'Investigación',
-      fechaLimite: '2026-07-15',
-      estado: 'Abierta',
-      descripcion: 'Convocatoria abierta para estudiantes y docentes interesados en proyectos de investigación.'
-    },
-    {
-      id: 2,
-      titulo: 'Monitoreo académico semestre II',
-      categoria: 'Monitoreo',
-      fechaLimite: '2026-08-01',
-      estado: 'Cerrada',
-      descripcion: 'Convocatoria cerrada para monitoreos académicos en diferentes facultades.'
-    }
-  ];
+  convocatorias: Convocatoria[] = [];
+  appliedIds = new Set<number>();
+  currentUser?: UsuarioEntity;
 
-  readonly appliedIds = new Set<number>();
+  ngOnInit(): void {
+    this.loadUser();
+    this.fetchConvocatorias();
+  }
+
+  private loadUser(): void {
+    if (!this.userEmail) {
+      return;
+    }
+
+    this.usuariosService.getCurrentUser(this.userEmail).subscribe((user) => {
+      this.currentUser = user;
+    });
+  }
+
+  private fetchConvocatorias(): void {
+    this.convocatoriasService.listar().subscribe((items) => {
+      this.convocatorias = items.map((item) => ({
+        id: item.id,
+        titulo: item.nombre,
+        categoria: item.categorias?.[0]?.nombre ?? 'General',
+        fechaLimite: item.fechaFin,
+        estado: item.estado,
+        descripcion: item.descripcion
+      }));
+    });
+  }
 
   get isAdmin(): boolean {
     return this.userRole === 'ADMINISTRADOR';
@@ -151,7 +169,23 @@ export class ConvocatoriasComponent {
   }
 
   apply(convocatoria: Convocatoria): void {
-    this.appliedIds.add(convocatoria.id);
+    if (!this.currentUser) {
+      return;
+    }
+
+    const request: PostulacionCreateRequest = {
+      usuarioId: this.currentUser.id,
+      convocatoriaId: convocatoria.id
+    };
+
+    this.postulacionesService.crear(request).subscribe({
+      next: () => {
+        this.appliedIds.add(convocatoria.id);
+      },
+      error: (error) => {
+        console.error('Error al postularse', error);
+      }
+    });
   }
 
   onCreateConvocatoria(): void {
@@ -161,22 +195,38 @@ export class ConvocatoriasComponent {
     }
 
     const raw = this.createForm.getRawValue();
-    const nextId = Math.max(...this.convocatorias.map((c) => c.id), 0) + 1;
+    const request: ConvocatoriaCreateRequest = {
+      nombre: raw.titulo,
+      descripcion: raw.descripcion,
+      fechaInicio: new Date().toISOString().split('T')[0],
+      fechaFin: raw.fechaLimite,
+      cuposDisponibles: 10,
+      estado: 'PUBLICADA',
+      categoriaIds: []
+    };
 
-    this.convocatorias.unshift({
-      id: nextId,
-      titulo: raw.titulo,
-      categoria: raw.categoria,
-      fechaLimite: raw.fechaLimite,
-      estado: 'Abierta',
-      descripcion: raw.descripcion
+    this.convocatoriasService.crear(request).subscribe((created) => {
+      this.convocatorias.unshift({
+        id: created.id,
+        titulo: created.nombre,
+        categoria: created.categorias?.[0]?.nombre ?? 'General',
+        fechaLimite: created.fechaFin,
+        estado: created.estado,
+        descripcion: created.descripcion
+      });
+      this.createForm.reset({ titulo: '', categoria: '', fechaLimite: '', descripcion: '' });
     });
-
-    this.createForm.reset({ titulo: '', categoria: '', fechaLimite: '', descripcion: '' });
   }
 
   removeConvocatoria(id: number): void {
-    this.convocatorias.splice(this.convocatorias.findIndex((c) => c.id === id), 1);
-    this.appliedIds.delete(id);
+    this.convocatoriasService.eliminar(id).subscribe({
+      next: () => {
+        this.convocatorias = this.convocatorias.filter((c) => c.id !== id);
+        this.appliedIds.delete(id);
+      },
+      error: (error) => {
+        console.error('Error al eliminar convocatoria', error);
+      }
+    });
   }
 }

@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth.service';
+import { ReportesService } from '../../core/services/reportes.service';
 
 @Component({
   selector: 'app-reportes',
@@ -26,7 +27,7 @@ import { AuthService } from '../../core/services/auth.service';
             <mat-card-title>Convocatorias activas</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>12 convocatorias abiertas actualmente.</p>
+            <p>{{ convocatoriasActivas }}</p>
           </mat-card-content>
         </mat-card>
 
@@ -36,7 +37,7 @@ import { AuthService } from '../../core/services/auth.service';
             <mat-card-title>Postulaciones recibidas</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>78 postulaciones recibidas en el último mes.</p>
+            <p>{{ postulacionesTotales }}</p>
           </mat-card-content>
         </mat-card>
 
@@ -46,7 +47,7 @@ import { AuthService } from '../../core/services/auth.service';
             <mat-card-title>Usuarios activos</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>42 usuarios activos en el sistema.</p>
+            <p>{{ usuariosActivos }}</p>
           </mat-card-content>
         </mat-card>
       </section>
@@ -72,10 +73,31 @@ import { AuthService } from '../../core/services/auth.service';
     `
   ]
 })
-export class ReportesComponent {
+export class ReportesComponent implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly reportesService = inject(ReportesService);
 
   readonly userRole = this.authService.getUserRole();
+
+  convocatoriasActivas = 'Cargando...';
+  postulacionesTotales = 'Cargando...';
+  usuariosActivos = 'Cargando...';
+
+  ngOnInit(): void {
+    this.loadReportes();
+  }
+
+  private loadReportes(): void {
+    this.reportesService.contarConvocatoriasActivas().subscribe((count) => {
+      this.convocatoriasActivas = `${count} convocatorias abiertas actualmente.`;
+    });
+    this.reportesService.contarPostulaciones().subscribe((count) => {
+      this.postulacionesTotales = `${count} postulaciones registradas.`;
+    });
+    this.reportesService.contarUsuariosActivos().subscribe((count) => {
+      this.usuariosActivos = `${count} usuarios activos en el sistema.`;
+    });
+  }
 
   get isAdmin(): boolean {
     return this.userRole === 'ADMINISTRADOR';

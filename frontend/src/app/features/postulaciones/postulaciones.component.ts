@@ -1,11 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { AuthService } from '../../core/services/auth.service';
+import { PostulacionesService, PostulacionEntity } from '../../core/services/postulaciones.service';
+import { UsuariosService, UsuarioEntity } from '../../core/services/usuarios.service';
+import { ConvocatoriasService } from '../../core/services/convocatorias.service';
 
 interface Postulacion {
   id: number;
@@ -28,7 +31,7 @@ interface Postulacion {
         <p *ngIf="isAdmin">Consulta todas las postulaciones registradas en el sistema.</p>
       </section>
 
-      <section *ngIf="isEstudiante || isDocente" class="postulaciones-panel">
+      <section *ngIf="(isEstudiante || isDocente) && postulaciones.length > 0" class="postulaciones-panel">
         <mat-card>
           <mat-card-title>Postulaciones activas</mat-card-title>
           <table mat-table [dataSource]="postulaciones" class="mat-elevation-z2">
@@ -56,7 +59,7 @@ interface Postulacion {
         </mat-card>
       </section>
 
-      <section class="info-panel" *ngIf="isEstudiante">
+      <section class="info-panel" *ngIf="isEstudiante && postulaciones.length === 0">
         <mat-card>
           <mat-card-title>¿Quieres postularte?</mat-card-title>
           <p>Visita la sección de convocatorias para encontrar oportunidades abiertas.</p>
@@ -81,29 +84,42 @@ interface Postulacion {
     `
   ]
 })
-export class PostulacionesComponent {
+export class PostulacionesComponent implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly postulacionesService = inject(PostulacionesService);
+  private readonly usuariosService = inject(UsuariosService);
+  private readonly convocatoriasService = inject(ConvocatoriasService);
 
   readonly userRole = this.authService.getUserRole();
+  readonly userEmail = this.authService.getUserEmail();
 
-  readonly postulaciones: Postulacion[] = [
-    {
-      id: 1,
-      convocatoria: 'Beca de investigación 2026',
-      estado: 'En revisión',
-      fecha: '2026-06-20',
-      solicitante: 'Ana Pérez'
-    },
-    {
-      id: 2,
-      convocatoria: 'Monitoreo académico semestre II',
-      estado: 'Aceptada',
-      fecha: '2026-06-03',
-      solicitante: 'Carlos Gómez'
-    }
-  ];
+  postulaciones: Postulacion[] = [];
+  usuarios: UsuarioEntity[] = [];
 
   readonly displayedColumns = ['convocatoria', 'estado', 'fecha', 'accion'];
+
+  ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  private loadUserData(): void {
+    this.usuariosService.listar().subscribe((users) => {
+      this.usuarios = users;
+      this.fetchPostulaciones();
+    });
+  }
+
+  private fetchPostulaciones(): void {
+    this.postulacionesService.listar().subscribe((items) => {
+      this.postulaciones = items.map((item) => ({
+        id: item.id,
+        convocatoria: `Convocatoria #${item.convocatoriaId}`,
+        estado: item.estado,
+        fecha: item.fechaPostulacion,
+        solicitante: this.usuarios.find((usuario) => usuario.id === item.usuarioId)?.nombre ?? 'Desconocido'
+      }));
+    });
+  }
 
   get isAdmin(): boolean {
     return this.userRole === 'ADMINISTRADOR';
@@ -118,6 +134,6 @@ export class PostulacionesComponent {
   }
 
   viewConvocatoria(convocatoria: string): void {
-    // placeholder para mostrar detalles o redirigir a convocatorias
+    console.log('Ver convocatoria', convocatoria);
   }
 }
