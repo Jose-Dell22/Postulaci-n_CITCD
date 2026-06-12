@@ -1,0 +1,100 @@
+<div class="feature-page">
+  <header class="page-header">
+    <a routerLink="/dashboard" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      Volver al dashboard
+    </a>
+    <h1>Reportes</h1>
+    @if (isAdmin) {
+      <p>Accede a m&eacute;tricas del sistema y revisa convocatorias reportadas.</p>
+    } @else {
+      <p>M&eacute;tricas generales del sistema.</p>
+    }
+  </header>
+
+  <section class="cards-grid">
+    <mat-card class="report-card">
+      <mat-card-header>
+        <div class="report-icon" style="background:#e8f5e9;color:#2e7d32;">
+          <mat-icon>campaign</mat-icon>
+        </div>
+        <div>
+          <mat-card-title>Convocatorias activas</mat-card-title>
+          <mat-card-subtitle>Estado actual del sistema</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="report-value">{{ convocatoriasActivas }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="report-card">
+      <mat-card-header>
+        <div class="report-icon" style="background:#e3f0ff;color:#1565c0;">
+          <mat-icon>assignment_turned_in</mat-icon>
+        </div>
+        <div>
+          <mat-card-title>Postulaciones recibidas</mat-card-title>
+          <mat-card-subtitle>Total registradas</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="report-value">{{ postulacionesTotales }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="report-card">
+      <mat-card-header>
+        <div class="report-icon" style="background:#fde8ea;color:#b5121b;">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div>
+          <mat-card-title>Usuarios activos</mat-card-title>
+          <mat-card-subtitle>Cuentas habilitadas</mat-card-subtitle>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="report-value">{{ usuariosActivos }}</p>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  @if (isAdmin && reportadas.length > 0) {
+    <section class="reported-panel">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>flag</mat-icon>
+            Convocatorias reportadas
+          </mat-card-title>
+          <mat-card-subtitle>{{ reportadas.length }} convocatoria(s) requieren atenci&oacute;n</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-wrapper">
+            <table mat-table [dataSource]="reportadas" class="mat-elevation-z2">
+              <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef>Convocatoria</th>
+                <td mat-cell *matCellDef="let r">{{ r.nombre }}</td>
+              </ng-container>
+              <ng-container matColumnDef="motivo">
+                <th mat-header-cell *matHeaderCellDef>Motivo del reporte</th>
+                <td mat-cell *matCellDef="let r">{{ r.motivoReporte || 'Sin motivo' }}</td>
+              </ng-container>
+              <ng-container matColumnDef="accion">
+                <th mat-header-cell *matHeaderCellDef>Acci&oacute;n</th>
+                <td mat-cell *matCellDef="let r">
+                  <button mat-stroked-button color="primary" (click)="atenderReporte(r.id)">
+                    <mat-icon>check</mat-icon>
+                    Atender
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['nombre', 'motivo', 'accion']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['nombre', 'motivo', 'accion']"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  }
+</div>

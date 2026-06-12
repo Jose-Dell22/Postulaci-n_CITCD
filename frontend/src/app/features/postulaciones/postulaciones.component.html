@@ -1,0 +1,79 @@
+<div class="feature-page">
+  <header class="page-header">
+    <a routerLink="/dashboard" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      Volver al dashboard
+    </a>
+    <h1>Postulaciones</h1>
+    @if (isEstudiante) {
+      <p>Revisa tus postulaciones y sigue su estado.</p>
+    } @else if (isDocente) {
+      <p>Revisa las postulaciones recibidas para tus convocatorias.</p>
+    } @else if (isAdmin) {
+      <p>Consulta todas las postulaciones registradas en el sistema.</p>
+    }
+  </header>
+
+  @if (postulaciones.length > 0) {
+    <section class="postulaciones-panel">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>assignment</mat-icon>
+            Listado de postulaciones
+          </mat-card-title>
+          <mat-card-subtitle>{{ postulaciones.length }} postulaci&oacute;n(es)</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-wrapper">
+            <table mat-table [dataSource]="postulaciones" class="mat-elevation-z2">
+              <ng-container matColumnDef="convocatoria">
+                <th mat-header-cell *matHeaderCellDef>Convocatoria</th>
+                <td mat-cell *matCellDef="let p">{{ p.convocatoria }}</td>
+              </ng-container>
+              <ng-container matColumnDef="solicitante">
+                <th mat-header-cell *matHeaderCellDef>Solicitante</th>
+                <td mat-cell *matCellDef="let p">{{ p.solicitante }}</td>
+              </ng-container>
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let p">
+                  <span class="estado-chip" [class.pendiente]="p.estado === 'PENDIENTE'"
+                        [class.aprobada]="p.estado === 'APROBADA'"
+                        [class.rechazada]="p.estado === 'RECHAZADA'">
+                    {{ p.estado }}
+                  </span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let p">{{ p.fecha }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  } @else {
+    <section class="info-panel">
+      <mat-card>
+        <mat-card-content>
+          <div class="info-icon">
+            <mat-icon>info</mat-icon>
+          </div>
+          @if (isEstudiante) {
+            <p>No tienes postulaciones activas. Visita la secci&oacute;n de convocatorias para encontrar oportunidades abiertas.</p>
+            <button mat-flat-button color="primary" routerLink="/convocatorias">
+              <mat-icon>campaign</mat-icon>
+              Ir a convocatorias
+            </button>
+          } @else {
+            <p>No hay postulaciones registradas en el sistema.</p>
+          }
+        </mat-card-content>
+      </mat-card>
+    </section>
+  }
+</div>

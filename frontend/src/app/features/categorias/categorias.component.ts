@@ -1,34 +1,60 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '../../core/services/auth.service';
+import { CategoriasService, CategoriaEntity } from '../../core/services/categorias.service';
 
 @Component({
   selector: 'app-categorias',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, RouterLink],
-  template: `
-    <main class="feature-page">
-      <mat-card>
-        <mat-card-title>Categorías</mat-card-title>
-        <mat-card-content>
-          <p>Administra categorías del sistema. Esta sección está pensada para el administrador.</p>
-          <ul>
-            <li>Investigación</li>
-            <li>Monitoreo</li>
-            <li>Capacitación</li>
-          </ul>
-          <button mat-flat-button color="primary" routerLink="/dashboard">Volver al dashboard</button>
-        </mat-card-content>
-      </mat-card>
-    </main>
-  `,
-  styles: [
-    `
-      .feature-page { padding: 1.5rem; display: flex; justify-content: center; }
-      mat-card { width: 100%; max-width: 720px; }
-      ul { padding-left: 1.2rem; }
-    `
-  ]
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatIconModule, MatTableModule, MatTooltipModule],
+  templateUrl: './categorias.component.html',
+  styleUrl: './categorias.component.scss'
 })
-export class CategoriasComponent {}
+export class CategoriasComponent implements OnInit {
+  private readonly authService = inject(AuthService);
+  private readonly categoriasService = inject(CategoriasService);
+
+  readonly userRole = this.authService.getUserRole();
+
+  categorias: CategoriaEntity[] = [];
+  loading = false;
+
+  readonly displayedColumns = ['nombre', 'descripcion', 'acciones'];
+
+  ngOnInit(): void {
+    this.cargarCategorias();
+  }
+
+  private cargarCategorias(): void {
+    this.loading = true;
+    this.categoriasService.listar().subscribe({
+      next: (data) => {
+        this.categorias = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
+
+  get isAdmin(): boolean {
+    return this.userRole === 'ADMINISTRADOR';
+  }
+
+  deleteCategoria(categoria: CategoriaEntity): void {
+    if (!confirm(`¿Estás seguro de eliminar la categoría "${categoria.nombre}"?`)) {
+      return;
+    }
+    this.categoriasService.eliminar(categoria.id).subscribe({
+      next: () => {
+        this.categorias = this.categorias.filter((c) => c.id !== categoria.id);
+      }
+    });
+  }
+}

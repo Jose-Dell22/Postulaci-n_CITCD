@@ -44,6 +44,13 @@ public class Convocatoria {
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean reportada = false;
+
+    @Column(name = "motivo_reporte", columnDefinition = "TEXT")
+    private String motivoReporte;
+
     @ManyToMany
     @JoinTable(
             name = "convocatoria_categoria",

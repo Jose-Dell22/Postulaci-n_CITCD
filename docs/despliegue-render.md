@@ -8,7 +8,11 @@
 | `gc-ms-convocatorias` | 8081 | Convocatorias, categorías y reporte por categoría |
 | `gc-ms-postulaciones` | 8082 | Postulaciones y reportes de resultados |
 | `gc-api-gateway` | 8083 | Punto de entrada único `/api/**` |
-| `gc-frontend` | — | Aplicación Angular (sitio estático) |
+| `gc-frontend` | 80 | Angular servido con nginx, proxea `/api` al gateway |
+
+## Cómo funciona el frontend
+
+El frontend se despliega como un **Docker web service** con nginx (no como sitio estático). Esto permite que nginx proxee las peticiones a `/api/*` hacia el gateway internamente (`http://gc-api-gateway:8083/api/`), evitando problemas de CORS entre dominios distintos.
 
 ## Variables de entorno
 
@@ -26,7 +30,6 @@ Configurar el grupo `gc-database` en Render con:
 2. Crear un **Blueprint** usando el archivo `render.yaml` en la raíz.
 3. Completar las variables sensibles del grupo `gc-database`.
 4. Ejecutar los scripts SQL de `docs/database/` en Supabase antes del primer arranque.
-5. Actualizar `frontend/src/environments/environment.prod.ts` con la URL pública del API Gateway si es necesario.
 
 ## Desarrollo local
 

@@ -45,9 +45,8 @@ export class DashboardComponent {
       icon: 'school',
       color: '#1565c0',
       options: [
-        { title: 'Convocatorias', description: 'Ver convocatorias disponibles', icon: 'campaign', route: '/convocatorias' },
-        { title: 'Postulaciones', description: 'Revisar postulaciones recibidas', icon: 'assignment', route: '/postulaciones' },
-        { title: 'Reportes', description: 'Ver reportes de postulaciones', icon: 'bar_chart', route: '/reportes' }
+        { title: 'Convocatorias', description: 'Ver y reportar convocatorias', icon: 'campaign', route: '/convocatorias' },
+        { title: 'Postulaciones', description: 'Revisar postulaciones recibidas', icon: 'assignment', route: '/postulaciones' }
       ]
     },
     ESTUDIANTE: {

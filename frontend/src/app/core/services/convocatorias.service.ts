@@ -11,6 +11,8 @@ export interface ConvocatoriaEntity {
   fechaFin: string;
   cuposDisponibles: number;
   estado: string;
+  reportada?: boolean;
+  motivoReporte?: string;
   categorias?: Array<{ id: number; nombre: string }>;
 }
 
@@ -38,7 +40,23 @@ export class ConvocatoriasService {
     return this.http.post<ConvocatoriaEntity>(this.baseUrl, request);
   }
 
+  obtenerPorId(id: number): Observable<ConvocatoriaEntity> {
+    return this.http.get<ConvocatoriaEntity>(`${this.baseUrl}/${id}`);
+  }
+
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  listarReportadas(): Observable<ConvocatoriaEntity[]> {
+    return this.http.get<ConvocatoriaEntity[]>(`${this.baseUrl}/reportadas`);
+  }
+
+  reportar(id: number, motivo: string): Observable<ConvocatoriaEntity> {
+    return this.http.put<ConvocatoriaEntity>(`${this.baseUrl}/${id}/reportar`, motivo);
+  }
+
+  desreportar(id: number): Observable<ConvocatoriaEntity> {
+    return this.http.put<ConvocatoriaEntity>(`${this.baseUrl}/${id}/desreportar`, null);
   }
 }

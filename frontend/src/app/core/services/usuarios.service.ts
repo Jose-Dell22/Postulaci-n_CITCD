@@ -29,4 +29,8 @@ export class UsuariosService {
       map((usuarios) => usuarios.find((usuario) => usuario.correo === correo))
     );
   }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }

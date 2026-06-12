@@ -73,9 +73,8 @@ services:
 
   - type: web
     name: gc-frontend
-    runtime: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist/frontend/browser
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
     envVars:
       - key: NODE_VERSION
         value: 22

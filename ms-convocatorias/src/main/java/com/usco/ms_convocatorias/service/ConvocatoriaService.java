@@ -67,6 +67,24 @@ public class ConvocatoriaService {
         convocatoriaRepository.delete(buscarPorId(id));
     }
 
+    public List<Convocatoria> listarReportadas() {
+        return convocatoriaRepository.findByReportadaTrue();
+    }
+
+    public Convocatoria reportar(Long id, String motivo) {
+        Convocatoria convocatoria = buscarPorId(id);
+        convocatoria.setReportada(true);
+        convocatoria.setMotivoReporte(motivo);
+        return convocatoriaRepository.save(convocatoria);
+    }
+
+    public Convocatoria desreportar(Long id) {
+        Convocatoria convocatoria = buscarPorId(id);
+        convocatoria.setReportada(false);
+        convocatoria.setMotivoReporte(null);
+        return convocatoriaRepository.save(convocatoria);
+    }
+
     private Set<Categoria> resolverCategorias(Set<Long> categoriaIds) {
         if (categoriaIds == null || categoriaIds.isEmpty()) {
             return new HashSet<>();

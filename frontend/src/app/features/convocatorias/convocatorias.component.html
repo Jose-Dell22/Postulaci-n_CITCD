@@ -1,0 +1,210 @@
+<div class="feature-page">
+  <header class="page-header">
+    <a routerLink="/dashboard" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      Volver al dashboard
+    </a>
+    <h1>Convocatorias</h1>
+    @if (isAdmin) {
+      <p>Visualiza todas las convocatorias activas e inactivas del sistema.</p>
+    } @else if (isDocente) {
+      <p>Crea y administra tus convocatorias.</p>
+    } @else {
+      <p>Explora convocatorias activas y p&oacute;stulate a las oportunidades disponibles.</p>
+    }
+  </header>
+
+  @if (isAdmin || isDocente) {
+    <section class="create-panel">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>add_circle</mat-icon>
+            Crear nueva convocatoria
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="createForm" (ngSubmit)="onCreateConvocatoria()" class="create-form">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>T&iacute;tulo</mat-label>
+                <input matInput formControlName="titulo" placeholder="Nombre de la convocatoria" />
+                @if (createForm.controls.titulo.errors?.['required'] && createForm.controls.titulo.touched) {
+                  <mat-error>El t&iacute;tulo es obligatorio</mat-error>
+                }
+                @if (createForm.controls.titulo.errors?.['minlength'] && createForm.controls.titulo.touched) {
+                  <mat-error>Debe tener al menos 5 caracteres</mat-error>
+                }
+                @if (createForm.controls.titulo.errors?.['maxlength'] && createForm.controls.titulo.touched) {
+                  <mat-error>M&aacute;ximo 200 caracteres</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Categor&iacute;a</mat-label>
+                <input matInput formControlName="categoria" placeholder="Ej: Investigaci&oacute;n" />
+              </mat-form-field>
+            </div>
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Fecha de inicio</mat-label>
+                <input matInput type="date" formControlName="fechaInicio" />
+                @if (createForm.controls.fechaInicio.errors?.['required'] && createForm.controls.fechaInicio.touched) {
+                  <mat-error>La fecha de inicio es obligatoria</mat-error>
+                }
+                @if (createForm.controls.fechaInicio.errors?.['fechaPasada'] && createForm.controls.fechaInicio.touched) {
+                  <mat-error>La fecha de inicio no puede ser anterior a hoy</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Fecha l&iacute;mite</mat-label>
+                <input matInput type="date" formControlName="fechaLimite" />
+                @if (createForm.controls.fechaLimite.errors?.['required'] && createForm.controls.fechaLimite.touched) {
+                  <mat-error>La fecha l&iacute;mite es obligatoria</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            @if (createForm.errors?.['fechaFinInvalida'] && createForm.touched) {
+              <div class="form-error">
+                <mat-icon>error_outline</mat-icon>
+                <span>La fecha l&iacute;mite debe ser posterior a la fecha de inicio</span>
+              </div>
+            }
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Descripci&oacute;n</mat-label>
+              <textarea matInput formControlName="descripcion" rows="3" placeholder="Describe la convocatoria..."></textarea>
+              @if (createForm.controls.descripcion.errors?.['required'] && createForm.controls.descripcion.touched) {
+                <mat-error>La descripci&oacute;n es obligatoria</mat-error>
+              }
+              @if (createForm.controls.descripcion.errors?.['minlength'] && createForm.controls.descripcion.touched) {
+                <mat-error>Debe tener al menos 10 caracteres</mat-error>
+              }
+              @if (createForm.controls.descripcion.errors?.['maxlength'] && createForm.controls.descripcion.touched) {
+                <mat-error>M&aacute;ximo 1000 caracteres</mat-error>
+              }
+            </mat-form-field>
+            <button mat-flat-button color="primary" type="submit" [disabled]="createForm.invalid">
+              <mat-icon>save</mat-icon>
+              Crear convocatoria
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  }
+
+  <section class="list-panel">
+    <h2 class="section-title">
+      <mat-icon>list</mat-icon>
+      Convocatorias disponibles
+    </h2>
+    @if (convocatorias.length === 0) {
+      <mat-card class="empty-card">
+        <mat-card-content>
+          <p>No hay convocatorias disponibles en este momento.</p>
+        </mat-card-content>
+      </mat-card>
+    }
+    <div class="cards-grid">
+      @for (c of convocatorias; track c.id) {
+        <mat-card class="convocatoria-card" [class.borrador]="c.estado === 'BORRADOR'"
+                  [class.cerrada]="c.estado === 'CERRADA'"
+                  [class.publicada]="c.estado === 'PUBLICADA'">
+          <mat-card-header>
+            <div mat-card-avatar class="icon-holder" [class.borrador]="c.estado === 'BORRADOR'"
+                 [class.cerrada]="c.estado === 'CERRADA'"
+                 [class.publicada]="c.estado === 'PUBLICADA'">
+              <mat-icon>campaign</mat-icon>
+            </div>
+            <mat-card-title>{{ c.titulo }}</mat-card-title>
+            <mat-card-subtitle>
+              <span class="estado-chip" [class.borrador]="c.estado === 'BORRADOR'"
+                    [class.cerrada]="c.estado === 'CERRADA'"
+                    [class.publicada]="c.estado === 'PUBLICADA'">
+                {{ c.estado }}
+              </span>
+              @if (c.reportada && (isAdmin || isDocente)) {
+                <span class="reportada-chip">
+                  <mat-icon>flag</mat-icon>
+                  Reportada
+                </span>
+              }
+              &middot; {{ c.categoria }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ c.descripcion }}</p>
+            <div class="meta">
+              <span><mat-icon>calendar_today</mat-icon> L&iacute;mite: {{ c.fechaLimite }}</span>
+              <span><mat-icon>group</mat-icon> {{ c.cupos }} cupos</span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-stroked-button [routerLink]="['/convocatorias', c.id]">
+              <mat-icon>visibility</mat-icon>
+              Ver detalles
+            </a>
+            @if (isEstudiante) {
+              <button mat-stroked-button color="primary" (click)="apply(c)"
+                      [disabled]="appliedIds.has(c.id) || c.estado !== 'PUBLICADA'">
+                <mat-icon>{{ appliedIds.has(c.id) ? 'check_circle' : 'how_to_reg' }}</mat-icon>
+                {{ appliedIds.has(c.id) ? 'Postulado' : 'Postularme' }}
+              </button>
+            }
+            @if (isDocente) {
+              <button mat-stroked-button color="primary" (click)="apply(c)"
+                      [disabled]="appliedIds.has(c.id) || c.estado !== 'PUBLICADA'">
+                <mat-icon>{{ appliedIds.has(c.id) ? 'check_circle' : 'how_to_reg' }}</mat-icon>
+                {{ appliedIds.has(c.id) ? 'Postulado' : 'Postularme' }}
+              </button>
+              @if (!c.reportada) {
+                <button mat-stroked-button color="accent" (click)="reportarConvocatoria(c)">
+                  <mat-icon>flag</mat-icon>
+                  Reportar
+                </button>
+              } @else {
+                <button mat-stroked-button color="warn" (click)="desreportarConvocatoria(c.id)">
+                  <mat-icon>flag_off</mat-icon>
+                  Descartar reporte
+                </button>
+              }
+            }
+            @if (isAdmin) {
+              <button mat-stroked-button color="warn" (click)="removeConvocatoria(c.id)">
+                <mat-icon>delete</mat-icon>
+                Eliminar
+              </button>
+              @if (c.reportada) {
+                <button mat-stroked-button color="accent" (click)="desreportarConvocatoria(c.id)">
+                  <mat-icon>check</mat-icon>
+                  Atender reporte
+                </button>
+              }
+            }
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  @if (appliedIds.size > 0) {
+    <section class="applied-panel">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>assignment_turned_in</mat-icon>
+            Mis postulaciones
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ul>
+            @for (c of convocatorias; track c.id) {
+              @if (appliedIds.has(c.id)) {
+                <li>{{ c.titulo }}</li>
+              }
+            }
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  }
+</div>

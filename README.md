@@ -1,5 +1,9 @@
 # Sistema de Gestión de Convocatorias Institucionales
 
+> **Prueba técnica — Universidad Surcolombiana (USCO)**
+>
+> Este proyecto es una aplicación de prueba full stack con microservicios Spring Boot + Angular. Los datos de prueba se insertan automáticamente al iniciar los backends (usuarios con contraseña `123456`, convocatorias, categorías y postulaciones). No está diseñado para uso en producción.
+
 Aplicación full stack desarrollada para la Universidad Surcolombiana (USCO). Permite administrar convocatorias dirigidas a estudiantes, docentes y administrativos para participar en eventos, becas, monitorías, proyectos, capacitaciones y demás actividades institucionales.
 
 El proyecto implementa una arquitectura de microservicios con Spring Boot en el backend, Angular en el frontend y PostgreSQL (Supabase) como base de datos relacional.
@@ -439,9 +443,36 @@ La aplicación estará disponible en `http://localhost:4200`.
 
 - Pantalla de login con formulario reactivo y validaciones
 - Almacenamiento y envío automático del token JWT
-- Guard de rutas para proteger el dashboard
-- Dashboard de bienvenida con cierre de sesión
+- Guard de rutas para proteger las vistas autenticadas
+- Dashboard de bienvenida con acceso por rol
 - Consumo de APIs a través del gateway (`http://localhost:8083/api`)
+- Inserción automática de datos de prueba al iniciar (6 usuarios, 6 categorías, 6 convocatorias, 7 postulaciones)
+
+### Rutas del frontend
+
+| Ruta                  | Componente              | Roles                      | Descripción                                |
+|-----------------------|-------------------------|----------------------------|--------------------------------------------|
+| `/`                   | InicioComponent         | Público                    | Página de bienvenida                       |
+| `/login`              | LoginComponent          | Público                    | Inicio de sesión                           |
+| `/registro`           | RegisterComponent       | Público                    | Registro de nuevo usuario                  |
+| `/dashboard`          | DashboardComponent      | Autenticado                | Panel principal con acceso por rol         |
+| `/convocatorias`      | ConvocatoriasComponent  | Autenticado                | CRUD y listado de convocatorias            |
+| `/convocatorias/:id`  | ConvocatoriaDetailComponent | Autenticado            | Detalle completo de una convocatoria       |
+| `/postulaciones`      | PostulacionesComponent  | Autenticado                | Listado de postulaciones                   |
+| `/categorias`         | CategoriasComponent     | Autenticado                | CRUD y listado de categorías               |
+| `/usuarios`           | UsuariosComponent       | ADMINISTRADOR              | Listado y eliminación de usuarios          |
+| `/reportes`           | ReportesComponent       | ADMINISTRADOR, DOCENTE     | Métricas y convocatorias reportadas        |
+| `**`                  | —                       | Público                    | Redirige a `/`                             |
+
+### Datos de prueba
+
+Al iniciar los microservicios, los `DataInitializer` insertan registros de prueba automáticamente (solo si la base de datos está vacía):
+
+| Microservicio      | Registros insertados                          | Contraseña    |
+|--------------------|-----------------------------------------------|---------------|
+| ms-usuarios        | 6 usuarios (admin, docentes, estudiantes)     | `123456`      |
+| ms-convocatorias   | 6 categorías y 6 convocatorias con relaciones | —             |
+| ms-postulaciones   | 7 postulaciones vinculadas a usuarios y convs | —             |
 
 ### Estructura del frontend
 

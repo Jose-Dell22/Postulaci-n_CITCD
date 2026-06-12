@@ -1,0 +1,106 @@
+<div class="feature-page">
+  <header class="page-header">
+    <a routerLink="/convocatorias" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a convocatorias
+    </a>
+  </header>
+
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Cargando detalles...</p>
+    </div>
+  } @else if (error) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon>error_outline</mat-icon>
+        <p>No se pudo cargar la convocatoria. Verifica que el ID sea correcto.</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (convocatoria) {
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <div mat-card-avatar class="icon-holder">
+          <mat-icon>campaign</mat-icon>
+        </div>
+        <mat-card-title>{{ convocatoria.nombre }}</mat-card-title>
+        <mat-card-subtitle>
+          <mat-chip-set>
+            <mat-chip [color]="estadoColor(convocatoria.estado)" highlighted>
+              {{ convocatoria.estado }}
+            </mat-chip>
+            @if (convocatoria.reportada) {
+              <mat-chip color="warn" highlighted>
+                <mat-icon>flag</mat-icon> Reportada
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <section class="info-section">
+          <h3><mat-icon>description</mat-icon> Descripci&oacute;n</h3>
+          <p>{{ convocatoria.descripcion }}</p>
+        </section>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>calendar_today</mat-icon>
+            <div>
+              <span class="label">Fecha de inicio</span>
+              <span class="value">{{ convocatoria.fechaInicio }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <mat-icon>event</mat-icon>
+            <div>
+              <span class="label">Fecha l&iacute;mite</span>
+              <span class="value">{{ convocatoria.fechaFin }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <mat-icon>group</mat-icon>
+            <div>
+              <span class="label">Cupos disponibles</span>
+              <span class="value">{{ convocatoria.cuposDisponibles }}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <mat-icon>badge</mat-icon>
+            <div>
+              <span class="label">ID</span>
+              <span class="value">#{{ convocatoria.id }}</span>
+            </div>
+          </div>
+        </div>
+
+        @if (convocatoria.categorias && convocatoria.categorias.length > 0) {
+          <section class="categorias-section">
+            <h3><mat-icon>category</mat-icon> Categor&iacute;as</h3>
+            <mat-chip-set>
+              @for (cat of convocatoria.categorias; track cat.id) {
+                <mat-chip>{{ cat.nombre }}</mat-chip>
+              }
+            </mat-chip-set>
+          </section>
+        }
+
+        @if (convocatoria.reportada && convocatoria.motivoReporte) {
+          <section class="reporte-section">
+            <h3><mat-icon>flag</mat-icon> Motivo del reporte</h3>
+            <p>{{ convocatoria.motivoReporte }}</p>
+          </section>
+        }
+      </mat-card-content>
+
+      <mat-card-actions>
+        <a mat-stroked-button routerLink="/convocatorias">
+          <mat-icon>arrow_back</mat-icon>
+          Volver a convocatorias
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

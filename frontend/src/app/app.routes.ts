@@ -31,6 +31,12 @@ export const routes: Routes = [
       import('./features/convocatorias/convocatorias.component').then((m) => m.ConvocatoriasComponent)
   },
   {
+    path: 'convocatorias/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/convocatorias/detalle/detalle.component').then((m) => m.ConvocatoriaDetailComponent)
+  },
+  {
     path: 'postulaciones',
     canActivate: [authGuard],
     loadComponent: () =>
