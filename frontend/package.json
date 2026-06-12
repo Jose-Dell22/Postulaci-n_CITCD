@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:all": "powershell -ExecutionPolicy Bypass -File ../scripts/start-all.ps1",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
