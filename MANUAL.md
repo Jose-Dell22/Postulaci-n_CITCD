@@ -102,6 +102,8 @@ cd frontend
 npm install
 npm start
 ```
+#o hacer los siguiente
+.\scripts\start-all.ps1
 
 Antes de iniciar, configure las variables de entorno de base de datos y JWT (copie `.env.example` y asigne los valores en su sistema o en cada terminal).
 
