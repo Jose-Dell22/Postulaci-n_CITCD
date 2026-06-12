@@ -5,19 +5,18 @@
 -- Orden: usuarios → categorias → convocatorias → convocatoria_categoria → postulaciones
 --
 -- Contraseña para todos los usuarios de ejemplo: 123456
--- Hash BCrypt: $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
 -- ============================================================
-
 -- ============================================================
 -- 1. USUARIOS (6 registros)
+-- Contraseña para todos: 123456
 -- ============================================================
-INSERT INTO usuarios (identificacion, nombre, correo, password, rol, estado, fecha_creacion) VALUES
-('10000001', 'Carlos Andrés Martínez',    'carlos.martinez@usco.edu.co',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ADMINISTRADOR', true,  '2025-01-15 08:00:00'),
-('10000002', 'María Fernanda López',      'maria.lopez@usco.edu.co',      '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'DOCENTE',       true,  '2025-01-20 09:30:00'),
-('10000003', 'Juan Carlos Pérez',         'juan.perez@usco.edu.co',       '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'DOCENTE',       true,  '2025-02-01 10:00:00'),
-('10000004', 'Ana Sofía Ramírez',        'ana.ramirez@usco.edu.co',      '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE',    true,  '2025-02-10 07:45:00'),
-('10000005', 'Luis Eduardo Gómez',        'luis.gomez@usco.edu.co',       '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE',    true,  '2025-02-15 08:15:00'),
-('10000006', 'Valentina Castro',          'valentina.castro@usco.edu.co', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ESTUDIANTE',    true,  '2025-03-01 11:00:00');
+INSERT INTO usuarios (identificacion, nombre, correo, password, rol, estado, fecha_creacion, codigo_docente) VALUES
+('10000001', 'Carlos Andrés Martínez', 'carlos.martinez@usco.edu.co', '$2a$10$gApLUWv2ZzjASGbHiffpmu9Z5piCIcstKgUEoP6LR0CM5v6TxrdS', 'ADMINISTRADOR', true, '2025-01-15 08:00:00', NULL),
+('10000002', 'María Fernanda López', 'maria.lopez@usco.edu.co', '$2a$10$gApLUWv2ZzjASGbHiffpmu9Z5piCIcstKgUEoP6LR0CM5v6TxrdS', 'DOCENTE', true, '2025-01-20 09:30:00', 'DOC001'),
+('10000003', 'Juan Carlos Pérez', 'juan.perez@usco.edu.co', '$2a$10$gApLUWv2ZzjASGbHiffpmu9Z5piCIcstKgUEoP6LR0CM5v6TxrdS', 'DOCENTE', true, '2025-02-01 10:00:00', 'DOC002'),
+('10000004', 'Ana Sofía Ramírez', 'ana.ramirez@usco.edu.co', '$2a$10$gApLUWv2ZzjASGbHiffpmu9Z5piCIcstKgUEoP6LR0CM5v6TxrdS', 'ESTUDIANTE', true, '2025-02-10 07:45:00', NULL),
+('10000005', 'Luis Eduardo Gómez', 'luis.gomez@usco.edu.co', '$2a$10$gApLUWv2ZzjASGbHiffpmu9Z5piCIcstKgUEoP6LR0CM5v6TxrdS', 'ESTUDIANTE', true, '2025-02-15 08:15:00', NULL),
+('10000006', 'Valentina Castro', 'valentina.castro@usco.edu.co', '$2a$10$gApLUWv2ZzjASGbHiffpmu9Z5piCIcstKgUEoP6LR0CM5v6TxrdS', 'ESTUDIANTE', true, '2025-03-01 11:00:00', NULL);
 
 -- ============================================================
 -- 2. CATEGORÍAS (6 registros)
