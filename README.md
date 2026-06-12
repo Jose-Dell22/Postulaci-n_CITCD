@@ -12,6 +12,7 @@ El proyecto implementa una arquitectura de microservicios con Spring Boot en el 
 
 ## Tabla de contenidos
 
+--Antes de todo encontrarás todas las rutas
 1. [Arquitectura](#arquitectura)
 2. [Stack tecnológico](#stack-tecnológico)
 3. [Estructura del repositorio](#estructura-del-repositorio)
@@ -31,7 +32,155 @@ El proyecto implementa una arquitectura de microservicios con Spring Boot en el 
 17. [Documentación adicional](#documentación-adicional)
 
 ---
+====================================================
+SISTEMA DE GESTIÓN DE CONVOCATORIAS - TODAS LAS RUTAS
+====================================================
 
+####################################################
+# MICROSERVICIOS DIRECTOS
+####################################################
+
+-------------------------
+AUTENTICACIÓN (8080)
+-------------------------
+
+POST   http://localhost:8080/api/auth/login
+POST   http://localhost:8080/api/auth/register
+
+-------------------------
+USUARIOS (8080)
+-------------------------
+
+GET    http://localhost:8080/api/usuarios
+GET    http://localhost:8080/api/usuarios/{id}
+PUT    http://localhost:8080/api/usuarios/{id}
+DELETE http://localhost:8080/api/usuarios/{id}
+
+-------------------------
+CONVOCATORIAS (8081)
+-------------------------
+
+GET    http://localhost:8081/api/convocatorias
+GET    http://localhost:8081/api/convocatorias/{id}
+POST   http://localhost:8081/api/convocatorias
+PUT    http://localhost:8081/api/convocatorias/{id}
+DELETE http://localhost:8081/api/convocatorias/{id}
+
+-------------------------
+CATEGORÍAS (8081)
+-------------------------
+
+GET    http://localhost:8081/api/categorias
+GET    http://localhost:8081/api/categorias/{id}
+POST   http://localhost:8081/api/categorias
+PUT    http://localhost:8081/api/categorias/{id}
+DELETE http://localhost:8081/api/categorias/{id}
+
+-------------------------
+POSTULACIONES (8082)
+-------------------------
+
+GET    http://localhost:8082/api/postulaciones
+GET    http://localhost:8082/api/postulaciones/{id}
+POST   http://localhost:8082/api/postulaciones
+PUT    http://localhost:8082/api/postulaciones/{id}/estado
+
+-------------------------
+REPORTES
+-------------------------
+
+GET    http://localhost:8081/api/reportes/convocatorias-categoria
+GET    http://localhost:8082/api/reportes/postulaciones-convocatoria
+GET    http://localhost:8082/api/reportes/resultado-postulaciones
+
+
+####################################################
+# API GATEWAY (ARQUITECTURA COMPLETA)
+####################################################
+
+-------------------------
+AUTENTICACIÓN
+-------------------------
+
+POST   http://localhost:8083/api/auth/login
+POST   http://localhost:8083/api/auth/register
+
+-------------------------
+USUARIOS
+-------------------------
+
+GET    http://localhost:8083/api/usuarios
+GET    http://localhost:8083/api/usuarios/{id}
+PUT    http://localhost:8083/api/usuarios/{id}
+DELETE http://localhost:8083/api/usuarios/{id}
+
+-------------------------
+CONVOCATORIAS
+-------------------------
+
+GET    http://localhost:8083/api/convocatorias
+GET    http://localhost:8083/api/convocatorias/{id}
+POST   http://localhost:8083/api/convocatorias
+PUT    http://localhost:8083/api/convocatorias/{id}
+DELETE http://localhost:8083/api/convocatorias/{id}
+
+-------------------------
+CATEGORÍAS
+-------------------------
+
+GET    http://localhost:8083/api/categorias
+GET    http://localhost:8083/api/categorias/{id}
+POST   http://localhost:8083/api/categorias
+PUT    http://localhost:8083/api/categorias/{id}
+DELETE http://localhost:8083/api/categorias/{id}
+
+-------------------------
+POSTULACIONES
+-------------------------
+
+GET    http://localhost:8083/api/postulaciones
+GET    http://localhost:8083/api/postulaciones/{id}
+POST   http://localhost:8083/api/postulaciones
+PUT    http://localhost:8083/api/postulaciones/{id}/estado
+
+-------------------------
+REPORTES
+-------------------------
+
+GET    http://localhost:8083/api/reportes/convocatorias-categoria
+GET    http://localhost:8083/api/reportes/postulaciones-convocatoria
+GET    http://localhost:8083/api/reportes/resultado-postulaciones
+
+
+####################################################
+# HEADER PARA ENDPOINTS PROTEGIDOS
+####################################################
+
+Authorization: Bearer <TOKEN_JWT>
+
+
+####################################################
+# ENDPOINTS PÚBLICOS
+####################################################
+
+POST http://localhost:8080/api/auth/login
+POST http://localhost:8080/api/auth/register
+
+POST http://localhost:8083/api/auth/login
+POST http://localhost:8083/api/auth/register
+
+####################################################
+# FLUJO DE PRUEBA RECOMENDADO
+####################################################
+
+1. POST /auth/login
+2. GET /usuarios
+3. GET /categorias
+4. GET /convocatorias
+5. POST /convocatorias
+6. POST /postulaciones
+7. PUT /postulaciones/{id}/estado
+8. GET /reportes/*
 ## Arquitectura
 
 El sistema sigue el patrón de microservicios reales (Opción B de la prueba técnica). Cada dominio de negocio corre en un servicio independiente y se comunican entre sí mediante REST. Un API Gateway actúa como punto de entrada único para el cliente.
